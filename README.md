@@ -18,7 +18,8 @@ This project uses a **hybrid architecture**:
 
 ## 🖼️ Screenshot
 
-> *(Insert a screenshot of your Electron application UI here)*
+> *<img width="1199" height="952" alt="image" src="https://github.com/user-attachments/assets/a0ee34e9-68b0-4099-a574-b83ef6b9b0c5" />
+*
 
 ---
 
