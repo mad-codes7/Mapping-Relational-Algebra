@@ -19,7 +19,7 @@ const cppExecutablePath = path.join(
 const dbPool = mysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: 'madhur@#12',
+  password: '',
   database: 'event_management_db2',
   waitForConnections: true,
   connectionLimit: 10,
