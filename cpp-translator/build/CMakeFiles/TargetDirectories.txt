@@ -1,0 +1,3 @@
+C:/dev/projects/dbms4/cpp-translator/build/CMakeFiles/RelationalAlgebraMapper.dir
+C:/dev/projects/dbms4/cpp-translator/build/CMakeFiles/edit_cache.dir
+C:/dev/projects/dbms4/cpp-translator/build/CMakeFiles/rebuild_cache.dir

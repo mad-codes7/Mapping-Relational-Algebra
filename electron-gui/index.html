@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>RA to MySQL Translator</title>
+  <style>
+    /* Classic desktop app styling */
+    body {
+      font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+      background-color: #D3D3D3; /* Classic app gray */
+      padding: 10px;
+    }
+    .container {
+      width: 800px;
+      margin: auto;
+    }
+    .input-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    /* Sunken (inset) text fields */
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      border: 2px inset #eee;
+      background-color: #FFFFFF;
+      box-sizing: border-box; /* Ensures padding doesn't break width */
+    }
+    textarea {
+      height: 150px;
+      font-size: 14px;
+    }
+
+    /* Raised (outset) buttons */
+    button {
+      border: 2px outset #f0f0f0;
+      background-color: #E0E0E0;
+      cursor: pointer;
+    }
+    button:active {
+      border-style: inset; /* Clicked state */
+    }
+
+    .symbols button {
+      width: 40px;
+      height: 40px;
+      font-size: 20px;
+      margin-right: 5px;
+    }
+
+    #translateBtn {
+      padding: 10px 15px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    /* Style for the syntax guide box */
+    .syntax-guide {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #999;
+      background-color: #D3D3D3;
+    }
+    .syntax-guide pre {
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Title changed as requested -->
+    <h2>Relational Algebra to MYSQL Translator</h2>
+
+    <div class="input-group">
+      <label for="raInput">RA Expression:</label>
+      <input type="text" id="raInput">
+    </div>
+
+    <div class="symbols" id="symbols">
+      <button>σ</button>
+      <button>π</button>
+      <button>⨝</button>
+      <button>∪</button>
+      <button>-</button>
+      <button>×</button>
+    </div>
+
+    <br>
+    <button id="translateBtn">Translate & Run</button>
+    <br><br>
+
+    <div class="input-group">
+      <label for="sqlOutput">Generated SQL:</label>
+      <textarea id="sqlOutput" readonly></textarea>
+    </div>
+
+    <div class="input-group">
+      <label for="resultsOutput">Query Results:</label>
+      <textarea id="resultsOutput" readonly></textarea>
+    </div>
+
+    <!-- Sample Syntax box added back -->
+    <div class="syntax-guide">
+      <pre>--- Sample Syntax ---
+Select     : σ condition (Relation)
+Project    : π attributes (Relation)
+Join       : Relation1 ⨝ Relation2
+Union      : (Expr1) ∪ (Expr2)
+Difference : (Expr1) - (Expr2)
+Product    : Relation1 × Relation2</pre>
+    </div>
+
+  </div>
+
+  <script>
+    // --- This is the Renderer Process script (runs in the HTML page) ---
+    // No changes to the JavaScript are needed.
+    const raInput = document.getElementById('raInput');
+    const sqlOutput = document.getElementById('sqlOutput');
+    const resultsOutput = document.getElementById('resultsOutput');
+    
+    // Add symbols to input
+    document.getElementById('symbols').addEventListener('click', (e) => {
+      if (e.target.tagName === 'BUTTON') {
+        raInput.value += e.target.innerText;
+        raInput.focus();
+      }
+    });
+
+    // Handle the translate button click
+    document.getElementById('translateBtn').addEventListener('click', async () => {
+      const raExpression = raInput.value;
+      if (!raExpression) return;
+
+      // Clear old output
+      sqlOutput.value = 'Translating...';
+      resultsOutput.value = 'Running query...';
+
+      // Call the 'translate' function we exposed in preload.js
+      const response = await window.api.translate(raExpression);
+
+      // Display the results
+      sqlOutput.value = response.sql;
+      resultsOutput.value = response.results;
+    });
+  </script>
+</body>
+</html>
