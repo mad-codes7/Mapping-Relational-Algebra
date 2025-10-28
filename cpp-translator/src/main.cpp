@@ -8,12 +8,10 @@
 #include <sstream>
 
 #ifdef _WIN32
-#include <windows.h> // Needed for Windows UTF-8 console support
+#include <windows.h>
 #endif
 
 using namespace std;
-
-// --- Your Original Parsing Logic (No Changes) ---
 
 string parse_expression(const string& expr, size_t& pos);
 string parse_term(const string& expr, size_t& pos);
@@ -124,7 +122,7 @@ string parse_expression(const string& expr, size_t& pos) {
 
     while (true) {
         trim_left(expr, pos);
-        
+
         if (pos < expr.length() && expr.compare(pos, 3, u8"∪") == 0) {
             pos += 3;
             string right_sql = parse_term(expr, pos);
@@ -171,9 +169,7 @@ string parse_and_translate(const string& input) {
     }
 }
 
-// --- NEW main() FUNCTION ---
 int main() {
-    // We must set the console to handle UTF-8
     #ifdef _WIN32
     SetConsoleCP(CP_UTF8);
     SetConsoleOutputCP(CP_UTF8);
@@ -181,12 +177,9 @@ int main() {
 
     srand(time(0));
     string line;
-    
-    // Read the single line of RA expression from standard input
+
     if (getline(cin, line)) {
-        // Parse it
         string sql_result = parse_and_translate(line);
-        // Print the final SQL to standard output
         cout << sql_result << endl;
     }
     return 0;
