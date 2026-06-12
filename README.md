@@ -1,161 +1,146 @@
-# Relational Algebra to MySQL Translator
+<div align="center">
+  <img src="https://unpkg.com/lucide-static@latest/icons/database.svg" width="60" height="60" alt="Database Icon" />
+  <h1>Relational Algebra to SQL Translator</h1>
+  <p><i>A desktop application bridging theoretical database concepts with practical execution.</i></p>
 
-This is a **desktop application** that translates **Relational Algebra (RA)** expressions into **SQL**, executes the query on a **local MySQL database**, and displays the results in a **simple, retro-style UI**.
-
----
-
-## 🧩 Architecture Overview
-
-This project uses a **hybrid architecture**:
-
-1. **C++ Backend (`cpp-translator`)**
-   A high-performance, zero-dependency **C++17 command-line tool** that handles all complex parsing and translation of RA expressions.
-
-2. **Electron Frontend (`electron-gui`)**
-   A modern **Electron.js** app that provides the user interface, spawns the C++ tool as a child process to generate SQL, and connects to MySQL using **Node.js (mysql2)** to execute queries.
+  [![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-blue?logo=github&style=for-the-badge)](https://github.com/mad-codes7/Mapping-Relational-Algebra)
+</div>
 
 ---
 
-## 🖼️ Screenshot
+## <img src="https://unpkg.com/lucide-static@latest/icons/layers.svg" width="24" height="24" align="center" /> Overview
 
-> *<img width="1199" height="952" alt="image" src="https://github.com/user-attachments/assets/a0ee34e9-68b0-4099-a574-b83ef6b9b0c5" />
-*
+The system translates complex Relational Algebra (RA) expressions into SQL, executes them against a local MySQL database, and displays the results in a clean, developer-focused interface. It utilizes a hybrid architecture that decouples parsing logic from the user interface. 
 
----
+### Application Screenshot
 
-## 🚀 Features
-
-* Translate complex **Relational Algebra expressions** (`Select`, `Project`, `Join`, `Union`, `Difference`, `Product`)
-* Uses **UTF-8 symbols** (σ, π, ⨝, ∪, −, ×)
-* Executes the generated SQL query directly against a **local MySQL database**
-* Displays both the **generated SQL** and **live query results**
-* Modular design — decoupled **C++ logic** from the **UI** to avoid driver conflicts
+![Application Screenshot](assets/screenshot.png)
 
 ---
 
-## ⚙️ Prerequisites
+## <img src="https://unpkg.com/lucide-static@latest/icons/code-2.svg" width="24" height="24" align="center" /> Tech Stack
 
-Before you begin, ensure the following are installed:
-
-* [Node.js](https://nodejs.org/) (includes npm)
-* A **C++17 compiler** (e.g., MinGW on Windows, GCC on Linux, Clang on macOS)
-* [CMake](https://cmake.org/download/)
-* A **local MySQL instance** with a database and tables to query
+![C++](https://img.shields.io/badge/c++-%2300599C.svg?style=for-the-badge&logo=c%2B%2B&logoColor=white)
+![Electron.js](https://img.shields.io/badge/Electron-191970?style=for-the-badge&logo=Electron&logoColor=white)
+![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white)
+![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
 
 ---
 
-## 🧱 How to Build and Run
+## <img src="https://unpkg.com/lucide-static@latest/icons/sparkles.svg" width="24" height="24" align="center" /> Key Features
 
-Follow these steps to get the application running.
+* **Custom AST Parser:** A from-scratch C++17 parsing engine that constructs an Object-Oriented Abstract Syntax Tree for robust SQL translation.
+* **Comprehensive Operator Support:** Handles Select, Project, Rename, Union, Difference, Intersection, Natural Join, Theta Join, and Cartesian Product.
+* **Live Schema Introspection:** A sidebar schema browser that automatically fetches tables, columns, data types, and key constraints (PK/FK) from the connected MySQL database.
+* **Secure Configuration:** Decoupled database credentials using environment variables (`.env`).
+* **Developer-Focused UI:** Features a code editor theme, query history, and click-to-insert symbol panels utilizing crisp Lucide icons.
 
-### 1️⃣ Build the C++ Translator
+---
+
+## <img src="https://unpkg.com/lucide-static@latest/icons/cpu.svg" width="24" height="24" align="center" /> Architecture & Design
+
+### System Architecture
+
+The application relies on Inter-Process Communication (IPC) to pass data between the UI, the Node.js backend, the C++ execution layer, and the database.
+
+<!-- PLACE ARCHITECTURE DIAGRAM HERE (e.g. ![System Architecture](assets/architecture.png)) -->
+> *Flow: User Input -> Electron IPC -> C++ Subprocess -> Generated SQL -> MySQL Query -> JSON Results -> UI Render.*
+
+### C++ Parser (Object-Oriented Design)
+
+The backend parser avoids string manipulation in favor of a strong OOP hierarchy.
+
+<!-- PLACE CLASS DIAGRAM HERE (e.g. ![Class Diagram](assets/class-diagram.png)) -->
+> *UML Class Diagram showing the `ASTNode` hierarchy (ProjectionNode, JoinNode, etc.) and the core `Parser` class.*
+
+---
+
+## <img src="https://unpkg.com/lucide-static@latest/icons/sigma.svg" width="24" height="24" align="center" /> Supported Operations
+
+| Operation | Symbol | Syntax Example | Generated SQL Mapping |
+| :--- | :--- | :--- | :--- |
+| **Selection** | `σ` | `σ condition (R)` | `WHERE` clause |
+| **Projection** | `π` | `π a,b (R)` | `SELECT a,b` |
+| **Rename** | `ρ` | `ρ alias (R)` | `AS alias` |
+| **Natural Join** | `⨝` | `R1 ⨝ R2` | `NATURAL JOIN` |
+| **Theta Join** | `⨝(cond)`| `R1 ⨝(c) R2` | `JOIN ... ON cond` |
+| **Union** | `∪` | `(A) ∪ (B)` | `UNION` |
+| **Intersection**| `∩` | `(A) ∩ (B)` | `INTERSECT` *(Requires MySQL 8.0.31+)* |
+| **Difference** | `−` | `(A) - (B)` | `EXCEPT` *(Requires MySQL 8.0.31+)* |
+| **Product** | `×` | `R1 × R2` | `CROSS JOIN` |
+
+---
+
+## <img src="https://unpkg.com/lucide-static@latest/icons/download.svg" width="24" height="24" align="center" /> Installation & Setup
+
+### Prerequisites
+* **C++17 Compiler** (MinGW on Windows, GCC/Clang on Unix)
+* **CMake** (v3.10+)
+* **Node.js** (v16+)
+* **MySQL** (v8.0+ recommended)
+
+### 1. Build the C++ Translator
+
+The parser must be compiled into an executable before running the app.
 
 ```bash
-# 1. Clone this repository
-git clone https://github.com/your-username/dbms4.git
-cd dbms4/cpp-translator
+git clone https://github.com/mad-codes7/Mapping-Relational-Algebra.git
+cd Mapping-Relational-Algebra/cpp-translator
 
-# 2. Create a build folder
+# Create build directory
 mkdir build
 cd build
 
-# 3. Configure the project
-# On Windows (MinGW):
-cmake -G "MinGW Makefiles" ..
-# On macOS/Linux:
-# cmake ..
-
-# 4. Build the executable
+# Configure and compile
+cmake -G "MinGW Makefiles" ..    # Use 'cmake ..' on macOS/Linux
 cmake --build .
 ```
 
-This will create `RelationalAlgebraMapper.exe` (or `RelationalAlgebraMapper` on Linux/macOS) inside `cpp-translator/build`.
-The Electron app is already configured to locate it there.
+### 2. Configure Database Credentials
 
----
-
-### 2️⃣ Configure and Run the Electron GUI
+The Electron app requires access to your local MySQL database. Do not hardcode credentials.
 
 ```bash
-# 1. Go to the electron-gui folder
 cd ../../electron-gui
 
-# 2. Install all dependencies
+# Install Node dependencies
 npm install
+
+# Setup environment variables
+cp .env.example .env
 ```
 
-#### ⚠️ Important: Configure Your Database
-
-Before running the app, edit the **database connection settings**:
-
-1. Open `electron-gui/main.js`
-2. Locate the `dbPool` object (around line 17)
-3. Update your MySQL credentials:
-
-```js
-const dbPool = mysql.createPool({
-  host: 'localhost',
-  user: 'your_mysql_user',        // <-- EDIT THIS
-  password: 'your_mysql_password', // <-- EDIT THIS
-  database: 'your_database_name',  // <-- EDIT THIS (e.g., event_management_db2)
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
-});
+Open the `.env` file and input your local database details:
+```env
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD="your_password_here"
+DB_NAME=your_database_name
 ```
+*Note: Ensure passwords with special characters (like `#`) are wrapped in double quotes.*
 
----
-
-### ▶️ Run the Application
+### 3. Run the Application
 
 ```bash
 npm start
 ```
 
----
 
-## 💡 Usage
-
-1. Launch the app.
-2. Enter your **Relational Algebra expression** in the input box.
-3. Use the **symbol buttons** (σ, π, ⨝, etc.) for convenience.
-4. Click **“Translate & Run”**.
-5. View the **generated SQL** and **query results** below.
 
 ---
 
-## 🧠 Sample Syntax
+## <img src="https://unpkg.com/lucide-static@latest/icons/mail.svg" width="24" height="24" align="center" /> Contact
 
-| Operation      | Syntax Example          |
-| -------------- | ----------------------- |
-| **Select**     | σ condition (Relation)  |
-| **Project**    | π attributes (Relation) |
-| **Join**       | Relation1 ⨝ Relation2   |
-| **Union**      | (Expr1) ∪ (Expr2)       |
-| **Difference** | (Expr1) − (Expr2)       |
-| **Product**    | Relation1 × Relation2   |
-
-### Example:
-
-```
-π name, venue (σ theme = 'Tech' (event))
-```
+For queries, collaborations, or suggestions, feel free to reach out:
+* **Email:** [madhurbiradar.dev@gmail.com](mailto:madhurbiradar.dev@gmail.com)
+* **GitHub:** [mad-codes7](https://github.com/mad-codes7)
 
 ---
 
-## 📂 Table of Contents
-
-* Relational Algebra to MySQL Translator
-* Screenshot
-* Features
-* Prerequisites
-* How to Build and Run
-
-  * Build the C++ Translator
-  * Configure and Run the Electron GUI
-* Usage
-* Sample Syntax
-
----
-
-**Made with ❤️ for database enthusiasts**
+<div align="center">
+  <img src="https://unpkg.com/lucide-static@latest/icons/database-zap.svg" width="20" height="20" alt="Database Zap" />
+  <p><b>Made for Database Lovers</b></p>
+</div>

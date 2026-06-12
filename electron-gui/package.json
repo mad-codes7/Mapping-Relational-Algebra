@@ -1,8 +1,8 @@
 {
-  "name": "electron-gui",
+  "name": "ra-sql-translator",
   "version": "1.0.0",
-  "description": "GUI for RA Mapper",
-  "main": "main.js",
+  "description": "Relational Algebra to MySQL Translator — Desktop App",
+  "main": "src/main/main.js",
   "scripts": {
     "start": "electron ."
   },
@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^17.4.2",
     "electron": "^38.4.0",
     "mysql2": "^3.15.3"
   }

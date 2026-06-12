@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Relational Algebra → SQL Translator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Source+Code+Pro:wght@400;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<header>
+  <div class="logo">∑</div>
+  <div class="header-text">
+    <h1>Relational Algebra → SQL Translator</h1>
+    <p>Parse · Translate · Execute · Analyse</p>
+  </div>
+  <div class="db-badge" id="dbBadge">
+    <i data-lucide="database" class="icon-sm"></i>
+    <span id="dbName">connecting…</span>
+  </div>
+</header>
+
+<div class="layout">
+  <main>
+
+    <div class="card">
+      <div class="card-head"><i data-lucide="pencil-line" class="icon-sm"></i> RA Expression</div>
+      <div class="card-body">
+        <input type="text" id="raInput" placeholder="e.g.  π name, venue (σ theme = 'Tech' (event))">
+        <div class="symbols" id="symbols">
+          <button class="sym-btn" data-sym="σ ">σ<span class="lbl">Select</span></button>
+          <button class="sym-btn" data-sym="π ">π<span class="lbl">Project</span></button>
+          <button class="sym-btn" data-sym="ρ ">ρ<span class="lbl">Rename</span></button>
+          <button class="sym-btn" data-sym="⨝">⨝<span class="lbl">Join</span></button>
+          <button class="sym-btn" data-sym="⨝(">⨝(<span class="lbl">θ-Join</span></button>
+          <button class="sym-btn" data-sym=" ∪ ">∪<span class="lbl">Union</span></button>
+          <button class="sym-btn" data-sym=" ∩ ">∩<span class="lbl">Intersect</span></button>
+          <button class="sym-btn" data-sym=" - ">−<span class="lbl">Diff</span></button>
+          <button class="sym-btn" data-sym=" × ">×<span class="lbl">Product</span></button>
+        </div>
+        <div class="actions">
+          <button id="translateBtn">
+            <div id="spinner"></div>
+            <i data-lucide="play" class="icon-sm"></i> Translate &amp; Run
+          </button>
+          <button id="clearBtn"><i data-lucide="x" class="icon-sm"></i> Clear</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><i data-lucide="terminal" class="icon-sm"></i> Generated SQL</div>
+      <div class="card-body" style="padding:12px 14px;">
+        <div class="sql-wrap">
+          <div id="sqlOutput">— SQL will appear here —</div>
+          <button id="copyBtn" onclick="copySQL()">
+            <i data-lucide="clipboard" class="icon-xs"></i> Copy
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <i data-lucide="table-2" class="icon-sm"></i> Query Results
+        <span class="head-right">
+          <button id="clearResultsBtn" onclick="clearResults()">
+            <i data-lucide="x" class="icon-xs"></i> Clear
+          </button>
+        </span>
+      </div>
+      <div class="results-wrap" id="resultsWrap">
+        <div class="result-msg">— Run a query to see results —</div>
+      </div>
+      <div class="row-count" id="rowCount"></div>
+    </div>
+
+  </main>
+
+  <aside>
+
+    <div class="sb-section">
+      <div class="sb-title"><i data-lucide="book-open" class="icon-sm"></i> Operations</div>
+      <div class="op-row"><span class="op-sym">σ</span><span class="op-name">Select</span><span class="op-syn">σ cond (R)</span></div>
+      <div class="op-row"><span class="op-sym">π</span><span class="op-name">Project</span><span class="op-syn">π a,b (R)</span></div>
+      <div class="op-row"><span class="op-sym">ρ</span><span class="op-name">Rename</span><span class="op-syn">ρ alias (R)</span></div>
+      <div class="op-row"><span class="op-sym">⨝</span><span class="op-name">Nat. Join</span><span class="op-syn">R1 ⨝ R2</span></div>
+      <div class="op-row"><span class="op-sym">⨝</span><span class="op-name">θ-Join</span><span class="op-syn">R1 ⨝(c) R2</span></div>
+      <div class="op-row"><span class="op-sym">∪</span><span class="op-name">Union</span><span class="op-syn">(A) ∪ (B)</span></div>
+      <div class="op-row"><span class="op-sym">∩</span><span class="op-name">Intersect</span><span class="op-syn">(A) ∩ (B)</span></div>
+      <div class="op-row"><span class="op-sym">−</span><span class="op-name">Difference</span><span class="op-syn">(A) - (B)</span></div>
+      <div class="op-row"><span class="op-sym">×</span><span class="op-name">Product</span><span class="op-syn">R1 × R2</span></div>
+    </div>
+
+    <div class="sb-section">
+      <div class="sb-title"><i data-lucide="layout-list" class="icon-sm"></i> Schema Browser</div>
+      <div id="schemaTree" class="schema-tree"><div class="schema-msg">Loading…</div></div>
+    </div>
+
+    <div class="sb-section">
+      <div class="sb-title"><i data-lucide="history" class="icon-sm"></i> Query History</div>
+      <ul id="historyList"><li class="h-empty">No queries yet</li></ul>
+    </div>
+
+  </aside>
+</div>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="./app.js"></script>
+</body>
+</html>

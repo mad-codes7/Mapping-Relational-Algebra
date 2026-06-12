@@ -1,0 +1,12 @@
+# Environment variables (NEVER commit — contains passwords)
+electron-gui/.env
+
+# Node modules
+electron-gui/node_modules/
+
+# C++ build artifacts
+cpp-translator/build/
+
+# OS files
+.DS_Store
+Thumbs.db
