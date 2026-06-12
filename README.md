@@ -3,7 +3,7 @@
   <h1>Relational Algebra to SQL Translator</h1>
   <p><i>A desktop application bridging theoretical database concepts with practical execution.</i></p>
 
-  [![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-blue?logo=github&style=for-the-badge)](https://github.com/mad-codes7/Mapping-Relational-Algebra)
+ 
 </div>
 
 ---
